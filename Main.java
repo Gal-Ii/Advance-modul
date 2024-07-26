@@ -1,81 +1,75 @@
-package f06_Defining_Classes.Car_Salesman;
+package f06_Defining_Classes.Google;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int n = Integer.parseInt(scanner.nextLine());
+        String input = scanner.nextLine();
 
-        List<Engine> engines = new ArrayList<>();
-        List<Car> cars = new ArrayList<>();
+        List<Person> peopleList = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) {
-            String[] enginInformation = scanner.nextLine().split("\\s+");
-//            model, power, displacement, and efficiency
-            String model = enginInformation[0];
-            int power = Integer.parseInt(enginInformation[1]);
-            String displacement = "n/a";
-            String efficiency = "n/a";
+        while (!input.equals("End")) {
+            String[] inputArr = input.split("\\s+");
+            String personName = inputArr[0];
 
-            if (enginInformation.length == 4) {
-                displacement = enginInformation[2];
-                efficiency = enginInformation[3];
+            Person person = getPersonByName(peopleList, personName);
+
+            if (input.contains("company")) {
+                String companyName = inputArr[2];
+                String department = inputArr[3];
+                double salary = Double.parseDouble(inputArr[4]);
+
+                Company company = new Company(companyName, department, salary);
+                person.setCompany(company);
+
+            } else if (input.contains("pokemon")) {
+                String pokemonName = inputArr[2];
+                String type = inputArr[3];
+
+                Pokemon pokemon = new Pokemon(pokemonName, type);
+                person.addPokemon(pokemon);
+
+            } else if (input.contains("parents")) {
+                String parentName = inputArr[2];
+                String birthday = inputArr[3];
+
+                Relative parent = new Relative(parentName, birthday);
+                person.addParents(parent);
+
+            } else if (input.contains("children")) {
+                String childName = inputArr[2];
+                String birthday = inputArr[3];
+
+                Relative children = new Relative(childName, birthday);
+                person.addChildren(children);
+
+            } else if (input.contains("car")) {
+                String model = inputArr[2];
+                int speed = Integer.parseInt(inputArr[3]);
+                Car car = new Car(model, speed);
+                person.setCar(car);
             }
-
-            if (enginInformation.length == 3) {
-                if (Character.isDigit(enginInformation[2].charAt(0))) {
-                    displacement = enginInformation[2];
-                } else {
-                    efficiency = enginInformation[2];
-                }
-            }
-            Engine engine = new Engine(model, power, displacement, efficiency);
-            engines.add(engine);
+            input = scanner.nextLine();
         }
-
-        int numCars = Integer.parseInt(scanner.nextLine());
-
-        for (int i = 0; i < numCars; i++) {
-            String[] infoCars = scanner.nextLine().split("\\s+");
-//            "{Model} {Engine} {Weight} {Color}",
-            String model = infoCars[0];
-            String engineName = infoCars[1];
-            String weight = "n/a";
-            String color = "n/a";
-
-            if (infoCars.length == 4) {
-                weight = infoCars[2];
-                color = infoCars[3];
-            }
-
-            if (infoCars.length == 3) {
-                if (Character.isDigit(infoCars[2].charAt(0))) {
-                    weight = infoCars[2];
-                } else {
-                    color = infoCars[2];
-                }
-            }
-
-            Engine engine = getEngineByModel(engines, engineName);
-            Car car = new Car(model, engine, weight, color);
-            cars.add(car);
-        }
-        for (Car car : cars) {
-            System.out.println(car);
-        }
-
+        String inputName = scanner.nextLine();
+        Person person = getPersonByName(peopleList, inputName);
+        System.out.println(person);
     }
 
-    private static Engine getEngineByModel(List<Engine> engines, String engineName) {
-        for (Engine engin : engines) {
-            if(engin.getModel().equals(engineName)){
-                return engin;
+    private static Person getPersonByName(List<Person> peopleList, String personName) {
+        for (Person person : peopleList) {
+            if (person.getName().equals(personName)) {
+                return person;
             }
         }
-        return null;
+        Person person = new Person(personName);
+        peopleList.add(person);
+        return person;
     }
 }
