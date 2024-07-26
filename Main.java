@@ -1,51 +1,52 @@
-package f06_Defining_Classes.Speed_Rasing;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+package sharkHaunt;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        //Initialize the repositories (Basin)
+        Basin pacific = new Basin("Pacific Ocean", 6);
+        Basin atlantic = new Basin("Atlantic Ocean", 2);
+        Basin ganges = new Basin("Ganges River", 1);
+//Initialize entities (Shark)
+        Shark tigerShark = new Shark("Tiger shark", 300, "mammals", "saltwater");
+        Shark whaleShark = new Shark("Whale shark", 1200, "zooplankton", "saltwater");
+        Shark dwarfShark = new Shark("Dwarf lantern shark", 20, "shrimp", "saltwater");
+        Shark bullShark = new Shark("Bull shark", 330, "dolphins", "freshtwater");
+        Shark gangesShark = new Shark("Ganges shark", 178, "fish", "freshwater");
 
-        int n = Integer.parseInt(scanner.nextLine());
+//Add Shark
+        pacific.addShark(tigerShark);
+        pacific.addShark(whaleShark);
+        pacific.addShark(dwarfShark);
 
-        List<Car> cars = new ArrayList<>();
+        atlantic.addShark(bullShark);
 
-        for (int i = 0; i < n; i++) {
-            String[] input = scanner.nextLine().split("\\s+");
+        ganges.addShark(gangesShark);
 
-            String model = input[0];
-            double fuel = Double.parseDouble(input[1]);
-            double fuelCostPerKm = Double.parseDouble(input[2]);
+//Remove Shark
+        System.out.println(pacific.removeShark("Carpet shark")); //false
 
-            Car car = new Car(model,fuel, fuelCostPerKm);
-            cars.add(car);
-        }
+        System.out.println(atlantic.removeShark("Lemon shark")); //false
+        System.out.println(atlantic.removeShark("Bull shark")); //true
 
-        String commandInput = scanner.nextLine();
-        while (!commandInput.contains("End")){
-            String[] commandToBeDone = commandInput.split("\\s+");
-            String command = commandToBeDone[0];
-            String model = commandToBeDone[1];
-            int kmToTravel = Integer.parseInt(commandToBeDone[2]);
+//Get the largest shark
+        System.out.println(pacific.getLargestShark().getKind()); //Whale shark
 
-            Car car = getCarByModel(cars, model);
-            car.drive(kmToTravel);
-            commandInput = scanner.nextLine();
-        }
+//Get the average length of sharks in given basin
+        System.out.println(pacific.getAverageLength()); //506
 
-cars.forEach(car -> System.out.println(car));
-    }
+        System.out.println(atlantic.getCount()); //0
 
-    private static Car getCarByModel(List<Car> cars, String model) {
+//Get a report for the given basin
+        System.out.println(pacific.report());
+        System.out.println(ganges.report());
 
-        for (Car car : cars) {
-            if(car.getModel().equals(model)){
-                return car;
-            }
-        }
+//Sharks in Pacific Ocean:
+//The Tiger shark is 300 centimeters long, eats mammals and inhabits saltwater.
+//The Whale shark is 1200 centimeters long, eats zooplankton and inhabits saltwater.
+//The Dwarf lantern shark is 20 centimeters long, eats shrimp and inhabits saltwater.
+//Sharks in Ganges River:
+//The Ganges shark is 178 centimeters long, eats fish and inhabits freshwater.
 
-        return null;
+
     }
 }
