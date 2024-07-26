@@ -1,42 +1,34 @@
-package f06_Defining_Classes.Raw_Data;
-
-import java.util.ArrayList;
-import java.util.List;
+package f06_Defining_Classes.Speed_Rasing;
 
 public class Car {
-//    model, engine, cargo, and a collection of exactly 4 tires
     private String model;
-    private Engine engine;
-    private Cargo cargo;
-    private List<Tires> tires;
+    private double fuel;
+    private double fuelCostPerKm;
+    private int distanceTraveled;
 
-    public Car(String model, Engine engine, Cargo cargo, List<Tires> tires){
+    public Car(String model, double fuel, double fuelCostPerKm){
         this.model = model;
-        this.engine = engine;
-        this.cargo = cargo;
-        this.tires = tires;
+        this.fuel = fuel;
+        this.fuelCostPerKm = fuelCostPerKm;
+        this.distanceTraveled = 0;
     }
 
     public String getModel() {
-        return model;
+        return this.model;
     }
 
-    public void extract(String command) {
-        switch (command) {
-            case "fragile":
-                for (Tires tire : tires) {
-                    double pressure = tire.getPressure();
-                    if (pressure < 1) {
-                        System.out.println(model);
-                        break;
-                    }
-                }
-                break;
-            case "flamable":
-                if (engine.getPower() > 250) {
-                    System.out.println(model);
-                }
-                break;
+    public void drive(int kmToTravel) {
+        double furlToDrive = kmToTravel * this.fuelCostPerKm;
+
+        if(this.fuel>=furlToDrive){
+            this.fuel -= furlToDrive;
+            this.distanceTraveled += kmToTravel;
+        }else {
+            System.out.println("Insufficient fuel for the drive");
         }
+    }
+
+    public String toString(){
+        return String.format("%s %.2f %d", this.model, this.fuel, this.distanceTraveled);
     }
 }

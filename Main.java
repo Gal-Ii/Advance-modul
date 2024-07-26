@@ -1,6 +1,8 @@
-package f06_Defining_Classes.Raw_Data;
+package f06_Defining_Classes.Speed_Rasing;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,30 +10,42 @@ public class Main {
 
         int n = Integer.parseInt(scanner.nextLine());
 
-        Map<String, List<Car>> carsByCargoType = new HashMap<>();
+        List<Car> cars = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
-            String[] inputArr = scanner.nextLine().split("\\s+");
-            String model = inputArr[0];
-            int engineSpeed = Integer.parseInt(inputArr[1]);
-            int enginePower = Integer.parseInt(inputArr[2]);
-            int cargoWeight = Integer.parseInt(inputArr[3]);
-            String cargoType = inputArr[4];
-            Engine engine = new Engine(engineSpeed, enginePower);
-            Cargo cargo = new Cargo(cargoWeight, cargoType);
+            String[] input = scanner.nextLine().split("\\s+");
 
-            List<Tires> tires = new ArrayList<>();
-            for (int j = 5; j <= 12; j += 2) {
-                Tires currentTire = new Tires(Double.parseDouble(inputArr[j]), Integer.parseInt(inputArr[j + 1]));
-                tires.add(currentTire);
-            }
-            Car currentCar = new Car(model, engine, cargo, tires);
-            carsByCargoType.putIfAbsent(cargoType, new ArrayList<>());
-            carsByCargoType.get(cargoType).add(currentCar);
+            String model = input[0];
+            double fuel = Double.parseDouble(input[1]);
+            double fuelCostPerKm = Double.parseDouble(input[2]);
+
+            Car car = new Car(model,fuel, fuelCostPerKm);
+            cars.add(car);
         }
 
-        String command = scanner.nextLine();
+        String commandInput = scanner.nextLine();
+        while (!commandInput.contains("End")){
+            String[] commandToBeDone = commandInput.split("\\s+");
+            String command = commandToBeDone[0];
+            String model = commandToBeDone[1];
+            int kmToTravel = Integer.parseInt(commandToBeDone[2]);
 
-        carsByCargoType.get(command).forEach(car -> car.extract(command));
+            Car car = getCarByModel(cars, model);
+            car.drive(kmToTravel);
+            commandInput = scanner.nextLine();
+        }
+
+cars.forEach(car -> System.out.println(car));
+    }
+
+    private static Car getCarByModel(List<Car> cars, String model) {
+
+        for (Car car : cars) {
+            if(car.getModel().equals(model)){
+                return car;
+            }
+        }
+
+        return null;
     }
 }
