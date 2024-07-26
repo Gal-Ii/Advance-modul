@@ -1,41 +1,56 @@
-package f06_Defining_Classes.Opinion_Poll;
+package f06_Defining_Classes.Pokemon_Trainer;
 
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<Person> persons = new ArrayList<>();
+        String input = scanner.nextLine();
 
-        int n = Integer.parseInt(scanner.nextLine());
+        List<Trainer> trainers = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) {
-            String[] input = scanner.nextLine().split("\\s+");
-            String name = input[0];
-            int age = Integer.parseInt(input[1]);
+        while (!input.contains("Tournament")) {
 
-            Person person = getPersonByName(persons, name, age);
+            String[] inputArr = input.split("\\s+");
+            String trainerName = inputArr[0];
+            String pokemonName = inputArr[1];
+            String pokemonElements = inputArr[2];
+            int pokemonHealth = Integer.parseInt(inputArr[3]);
+
+            Trainer trainer = getTrainersByName(trainers, trainerName);
+            Pokemon pokemon = new Pokemon(pokemonName, pokemonElements, pokemonHealth);
+            trainer.addPokemon(pokemon);
+
+            input = scanner.nextLine();
         }
-        persons = persons.stream().filter(person -> person.getAge() > 30).collect(Collectors.toList());
-        persons.sort(Comparator.comparing(person -> person.getName()));
 
-        for (Person person : persons) {
-            System.out.println(person.toString());
+        String element = scanner.nextLine();
+
+        while (!element.contains("End")) {
+
+            for (Trainer trainer : trainers) {
+                trainer.checkIfPokemonExistByElement(element);
+            }
+            element = scanner.nextLine();
         }
 
+        Collections.sort(trainers, Comparator.comparing(Trainer::getBadges).reversed());
+        for (Trainer trainer : trainers) {
+            System.out.println(trainer);
+        }
     }
 
-    private static Person getPersonByName(List<Person> persons, String name, int age) {
-        for (Person p : persons) {
-            if(p.getName().equals(name)){
-                return p;
+    private static Trainer getTrainersByName(List<Trainer> trainers, String trainerName) {
+        for (Trainer trainer : trainers) {
+            if (trainer.getName().equals(trainerName)) {
+                return trainer;
             }
         }
-        Person person = new Person(name, age);
-        persons.add(person);
-        return person;
+
+        Trainer trainer = new Trainer(trainerName);
+        trainers.add(trainer);
+        return trainer;
     }
+
 }

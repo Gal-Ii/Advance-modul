@@ -1,16 +1,26 @@
-package f06_Defining_Classes.Google;
+package f06_Defining_Classes.Pokemon_Trainer;
 
 public class Pokemon {
-    private String pokemonName;
-    private String type;
+//name, an element, and health
 
-    public Pokemon(String pokemonName, String type){
-        this.pokemonName = pokemonName;
-        this.type = type;
+    private String name;
+    private String element;
+    private int health;
+
+    public Pokemon(String name, String element, int health){
+        this.name = name;
+        this.element = element;
+        this.health = health;
     }
 
-    public String toString(){
-        return String.format("%s %s", this.pokemonName, this.type);
+    public String getElement(){
+        return this.element;
     }
 
+    public int getHealth(){
+        return this.health;
+    }
+    public void loseHealth(){
+        this.health -= 10;
+    }
 }
